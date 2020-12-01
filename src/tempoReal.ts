@@ -1,5 +1,3 @@
-
-import * as schedule from 'node-schedule';
 import * as axios from 'axios';
 import * as csvParser from 'neat-csv';
 import {Subject} from 'rxjs';
@@ -20,7 +18,6 @@ export async function init() {
     moduleOk = true;
     tempoRealJob = setInterval(async () => {
         tempoRealData = await getRealTimePosition();
-        console.log(tempoRealData.sort((a,b) => a.dataHora < b.dataHora).slice(0, 10));
         subject.next();
     }, 20000);
 }
@@ -33,7 +30,7 @@ export function getTempoRealData() {
 export function subscribe(params:any) {
     subject.subscribe({
         next: (v) => {
-            let result = tempoRealData.find(elem => elem.numeroLinha == params.numeroLinha);
+            let result = tempoRealData.filter(elem => elem.numeroLinha == params.numeroLinha && elem.numeroVeiculo == 30373);
             params.callback(result);
         }
     });
